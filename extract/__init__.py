@@ -25,6 +25,7 @@
 #   ● All names are capitalised in all data entries.
 
 # Ticket 5: Update your input script to validate the responses to the third answer field. This answer must have a numeric value between 1 and 10.
+# Date update added: 23/03/2023
 # Any rows with an invalid value are ignored.
 # Objectives 
 #   ● A final array is created with the input data excluding any rows where answer 3 is invalid.
@@ -32,7 +33,7 @@
 
 import csv
 
-def get_input(file_path):
+def read_csv_file(file_path):
 
     data = []
     user_ids = set() # Ticket 2: Keep track of seen user ids.
@@ -61,7 +62,20 @@ def get_input(file_path):
 
     return data
 
+#Ticket 6: Add functionality to your input script to output the cleansed data to a new CSV file..
+# Date update added: 23/03/2023
+# Objectives 
+#   ● A new file is created called clean_results.csv.
+#   ● The file is recreated on each execution.
+#   ● No invalid or unformatted data is present in the new file
+
+def write_csv_file(file_path, data):
+    with open(file_path, 'w', newline='') as csv_file:
+        csv_writer = csv.writer(csv_file)
+        csv_writer.writerow(['user_id', 'first_name', 'last_name', 'answer_1', 'answer_2', 'answer_3'])
+        for row in data:
+            csv_writer.writerow(row)
 
 file_path = 'results.csv'
-data = get_input(file_path)
-print(data)
+clean_data = read_csv_file(file_path)
+write_csv_file('clean_results.csv', clean_data)
