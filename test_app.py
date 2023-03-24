@@ -1,5 +1,5 @@
 import pytest
-from extract import get_input
+from extract import read_csv_file
 
 # Ticket 1: Read a CSV file
 # In your input script, create a function that will read data from a CSV file.
@@ -11,7 +11,7 @@ def test_input_is_list():
     expected_output = list
 
     #Act
-    output = get_input(filename)
+    output = read_csv_file(filename)
 
     #Assert
     assert type(output) == expected_output
@@ -24,7 +24,7 @@ def test_input_is_correct():
     expected_rowcount = 25
     
     # Act
-    output = get_input(filename)
+    output = read_csv_file(filename)
     actual_columns = output[0]
     actual_rowcount = len(output[1:])
 
