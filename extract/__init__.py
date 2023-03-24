@@ -16,20 +16,32 @@
 # Objectives 
 #   ● A final array is created with any empty lines omitted.
 
+# Ticket 4: Description Add functionality to your input script to automatically capitalise the first_name and last_name fields found in the input data.
+# Objectives 
+#    ● All names are capitalised in all data entries.
+
 import csv
 
 def get_input(file_path):
+
     data = []
     user_ids = set() # keep track of seen user ids.
+
     with open(file_path, 'r') as csv_file:
-        csv_reader = csv.reader(csv_file)
+        csv_reader = csv.reader(csv_file) # Ticket 1: Read data from the csv file.
+
         for row in csv_reader:
+
             if not row[0]:
                 continue # Ticket 3: Skip empty lines.
-            user_id = row[0] # Ticket 2: Track user_ids found, begin creating list.
+            user_id, first_name, last_name, answer_1, answer_2, answer_3 = row[:6]
+            first_name = first_name.strip().capitalize() # Ticket 4: Capitalise first name entry
+            last_name = last_name.strip().capitalize() # Ticket 4: Capitalise last name entry
+
             if user_id not in user_ids: # Ticket 2: For each row in the file, check if the user id is already in the 'user_id' variable, if not then add that id.
-                data.append(row)
+                data.append([user_id, first_name, last_name, answer_1, answer_2, answer_3])
                 user_ids.add(user_id)
+
     return data
 
 
