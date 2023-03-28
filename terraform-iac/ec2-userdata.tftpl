@@ -1,0 +1,49 @@
+#!/bin/bash -xe
+yum update -y
+yum install -y unzip
+amazon-linux-extras enable nginx1 python3
+yum clean metadata
+yum install -y nginx python3
+systemctl enable nginx
+systemctl start nginx
+cat <<EOT > /usr/share/nginx/html/index.html
+<html>
+    <head>
+        <title>DevOps Workshop 9</title>
+        <link rel="icon" type="image/svg+xml" sizes="any"
+        href="https://multiverse.io/favicon.svg">
+        <style>
+            html {
+            background:#242457;
+            color:#fff;
+            text-align:center;
+            font-weight:800;
+            font-size:1.5rem;
+            margin: 1.5rem;
+            }
+        </style>
+    </head>
+    <body>
+        <p>Hello from the Multiverse DevOps Module Workshop 9!</p>
+    </body>
+</html>
+EOT
+mkdir -p /root/.aws
+cat <<EOT >> /root/.aws/config
+[default]
+region = eu-west-2
+EOT
+cat <<EOT >> /root/mvws9.sh
+#!/bin/bash
+rm -rf /root/code
+mkdir -p /root/code
+aws s3 cp s3://${s3_bucket}/code.zip /tmp/code.zip
+unzip /tmp/code.zip -d /root/code/
+aws s3 cp s3://${s3_bucket}/results.csv /root/code/results.csv
+python3 /root/code/script1.py
+python3 /root/code/script2.py > /root/code/results.txt
+aws s3 cp /root/code/results.txt s3://${s3_bucket}/results.txt
+EOT
+cat <<EOT >> /etc/cron.d/mvws9
+* * * * * root /bin/bash /root/mvws9.sh
+EOT
