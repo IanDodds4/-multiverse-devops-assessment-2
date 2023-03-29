@@ -1,5 +1,9 @@
 FROM amazon/aws-cli:latest
 
+COPY ./build/*.crt /usr/local/share/ca-certificates/cert.ca
+
+RUN update-ca-trust
+
 RUN yum update -y \
     && yum install -y yum-utils shadow-utils \
     && yum-config-manager --add-repo https://rpm.releases.hashicorp.com/AmazonLinux/hashicorp.repo \
